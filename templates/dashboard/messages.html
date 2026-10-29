@@ -1,0 +1,49 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="dash-toolbar">
+  <a href="{% url 'dashboard:newsletter' %}" class="dash-btn dash-btn-ghost">Subscribers</a>
+</div>
+<div class="dash-card">
+  {% if messages_list %}
+  <div class="dash-table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>Subject</th>
+          <th>Message</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in messages_list %}
+        <tr {% if not m.is_read %}style="background:#f8fffc;"{% endif %}>
+          <td>
+            <strong>{{ m.name }}</strong><br>
+            <span style="color:#8b939c;font-size:12px;">{{ m.email }}{% if m.telephone %} · {{ m.telephone }}{% endif %}</span>
+          </td>
+          <td>{{ m.subject|default:"—" }}</td>
+          <td style="max-width:280px;">{{ m.message|truncatechars:100 }}</td>
+          <td>{{ m.created_at|date:"M d, H:i" }}</td>
+          <td>
+            {% if not m.is_read %}
+            <form action="{% url 'dashboard:message_read' m.pk %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="dash-btn dash-btn-sm">Mark read</button>
+            </form>
+            {% else %}
+            <span class="badge badge-gray">Read</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No contact messages.</div>
+  {% endif %}
+</div>
+{% endblock %}

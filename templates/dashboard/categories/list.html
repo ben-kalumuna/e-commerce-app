@@ -1,0 +1,46 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="dash-toolbar">
+  <a href="{% url 'dashboard:category_create' %}" class="dash-btn">+ Add Category</a>
+  <a href="{% url 'dashboard:offers' %}" class="dash-btn dash-btn-ghost">View offers</a>
+</div>
+<div class="dash-card">
+  {% if categories %}
+  <div class="dash-table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Parent</th>
+          <th>Products</th>
+          <th>Order</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in categories %}
+        <tr>
+          <td><strong>{{ c.name }}</strong></td>
+          <td>{{ c.parent.name|default:"—" }}</td>
+          <td>{{ c.product_count }}</td>
+          <td>{{ c.sort_order }}</td>
+          <td>{% if c.is_active %}<span class="badge badge-mint">Active</span>{% else %}<span class="badge badge-gray">Hidden</span>{% endif %}</td>
+          <td style="white-space:nowrap;">
+            <a href="{% url 'dashboard:category_edit' c.pk %}" class="dash-btn dash-btn-ghost dash-btn-sm">Edit</a>
+            <form action="{% url 'dashboard:category_delete' c.pk %}" method="post" style="display:inline;" onsubmit="return confirm('Delete category?');">
+              {% csrf_token %}
+              <button type="submit" class="dash-btn dash-btn-danger dash-btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No categories yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

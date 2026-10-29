@@ -1,0 +1,52 @@
+{% extends 'dashboard/base.html' %}
+
+{% block search_action %}{% url 'dashboard:inventory' %}{% endblock %}
+
+{% block content %}
+<div class="dash-toolbar">
+  <a href="?stock=low" class="dash-btn dash-btn-sm {% if filter_stock == 'low' %}{% else %}dash-btn-ghost{% endif %}">Low stock</a>
+  <a href="?stock=out" class="dash-btn dash-btn-sm {% if filter_stock == 'out' %}{% else %}dash-btn-ghost{% endif %}">Out of stock</a>
+  <a href="?stock=alerts" class="dash-btn dash-btn-sm {% if filter_stock == 'alerts' %}{% else %}dash-btn-ghost{% endif %}">Open alerts</a>
+  <a href="{% url 'dashboard:inventory' %}" class="dash-btn dash-btn-ghost dash-btn-sm">All</a>
+  <a href="{% url 'dashboard:stock_alerts' %}" class="dash-btn dash-btn-ghost dash-btn-sm">Alert center</a>
+</div>
+<div class="dash-card">
+  {% if products %}
+  <div class="dash-table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Current stock</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td><strong>{{ p.name }}</strong></td>
+          <td>{{ p.category.name }}</td>
+          <td class="{% if p.stock == 0 %}stock-out{% elif p.is_low_stock %}stock-low{% endif %}">
+            {{ p.stock }}
+            {% if p.is_low_stock and p.stock > 0 %}<span class="badge badge-orange">Low</span>{% endif %}
+            {% if p.stock == 0 %}<span class="badge badge-red">Out</span>{% endif %}
+          </td>
+          <td>
+            <form action="{% url 'dashboard:inventory_update' p.pk %}" method="post" style="display:flex;gap:8px;align-items:center;">
+              {% csrf_token %}
+              <input class="dash-input" type="number" name="stock" value="{{ p.stock }}" min="0" style="width:90px;padding:8px;">
+              <label style="font-size:12px;white-space:nowrap;"><input type="checkbox" name="is_active" value="on" class="dash-check" {% if p.is_active %}checked{% endif %}> Active</label>
+              <button type="submit" class="dash-btn dash-btn-sm">Save</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No products match this filter.</div>
+  {% endif %}
+</div>
+{% endblock %}

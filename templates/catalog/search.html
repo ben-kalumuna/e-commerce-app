@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search{% if query %}: {{ query }}{% endif %} — Alesi Grocery{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li>Search</li>
+		</ul>
+	</div>
+</div>
+<div class="banner">
+	{% include 'partials/_sidebar.html' %}
+	<div class="w3l_banner_nav_right">
+		<div class="w3l_banner_nav_right_banner3">
+			<h3>Search results{% if query %} for “{{ query }}”{% endif %}<span class="blink_me"></span></h3>
+		</div>
+		<div class="w3ls_w3l_banner_nav_right_grid">
+			{% if products %}
+			<div class="w3ls_w3l_banner_nav_right_grid1">
+				{% for product in products %}
+					{% include 'partials/_product_card.html' with product=product %}
+				{% endfor %}
+				<div class="clearfix"> </div>
+			</div>
+			{% else %}
+			<div style="padding:40px 20px;">
+				<p>{% if query %}No products matched “{{ query }}”.{% else %}Enter a search term above.{% endif %}</p>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+{% endblock %}

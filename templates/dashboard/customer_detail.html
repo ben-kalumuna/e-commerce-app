@@ -1,0 +1,36 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="dash-grid-2">
+  <div class="dash-card">
+    <div class="dash-card-head"><h2>{{ customer.username }}</h2></div>
+    <p><strong>Email:</strong> {{ customer.email|default:"—" }}</p>
+    <p><strong>Phone:</strong> {{ customer.profile.phone|default:"—" }}</p>
+    <p><strong>Joined:</strong> {{ customer.date_joined|date:"M d, Y H:i" }}</p>
+    <p><strong>Last login:</strong> {{ customer.last_login|date:"M d, Y H:i"|default:"Never" }}</p>
+  </div>
+  <div class="dash-card">
+    <div class="dash-card-head"><h2>Orders</h2></div>
+    {% if orders %}
+    <div class="dash-table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>#</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td><a href="{% url 'dashboard:order_detail' order.pk %}">#{{ order.pk }}</a></td>
+            <td>${{ order.total }}</td>
+            <td><span class="status-pill status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+            <td>{{ order.created_at|date:"M d" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">No orders from this customer.</div>
+    {% endif %}
+  </div>
+</div>
+<p style="margin-top:16px;"><a href="{% url 'dashboard:customer_list' %}" class="dash-btn dash-btn-ghost">← Back</a></p>
+{% endblock %}

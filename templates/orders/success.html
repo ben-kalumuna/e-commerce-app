@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmed — Alesi Grocery{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li>Order Confirmed</li>
+		</ul>
+	</div>
+</div>
+<div class="checkout">
+	<div class="container" style="padding:40px 15px;">
+		<h2>Thank you! Order #{{ order.pk }} placed</h2>
+		<p>Your order will be delivered with <strong>Cash on Delivery</strong>.</p>
+		<p>Status: <strong>{{ order.get_status_display }}</strong> · Total: <strong>${{ order.total }}</strong></p>
+		<p>Delivering to {{ order.full_name }}, {{ order.city }}.</p>
+		<p style="margin-top:16px;background:#fff8e6;padding:12px;border-radius:4px;">
+			Your items <strong>remain in the cart</strong> until you confirm you received the order.
+			After you confirm receipt (and pay COD), the admin will see the order as <strong>Delivered</strong> and your cart will clear.
+		</p>
+		<p style="margin-top:20px;">
+			<a href="{% url 'accounts:order_detail' order.pk %}" class="button" style="padding:10px 20px;background:#84C639;color:#fff;text-decoration:none;">Track order</a>
+			<a href="{% url 'cart:detail' %}" style="margin-left:12px;">View cart</a>
+		</p>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="dash-toolbar">
+  <a href="?show=open" class="dash-btn {% if show != 'open' %}dash-btn-ghost{% endif %} dash-btn-sm">
+    Open ({{ open_count }})
+  </a>
+  <a href="?show=resolved" class="dash-btn {% if show != 'resolved' %}dash-btn-ghost{% endif %} dash-btn-sm">
+    Resolved
+  </a>
+  <a href="{% url 'dashboard:inventory' %}?stock=low" class="dash-btn dash-btn-ghost dash-btn-sm">Inventory · low</a>
+</div>
+
+{% if show == 'open' %}
+<div class="dash-flash dash-flash-warning" style="margin-bottom:16px;">
+  Alerts open automatically when stock falls to a product’s threshold (default 10). Restocking above the threshold resolves them.
+</div>
+{% endif %}
+
+<div class="dash-card">
+  {% if alerts %}
+  <div class="dash-table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Severity</th>
+          <th>Stock</th>
+          <th>Threshold</th>
+          <th>When</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for alert in alerts %}
+        <tr>
+          <td>
+            <strong>{{ alert.product.name }}</strong><br>
+            <span style="color:#8b939c;font-size:12px;">{{ alert.product.category.name }}</span>
+          </td>
+          <td>
+            {% if alert.severity == 'out' %}
+            <span class="badge badge-red">Out of stock</span>
+            {% else %}
+            <span class="badge badge-orange">Low stock</span>
+            {% endif %}
+          </td>
+          <td class="{% if alert.stock_at_alert == 0 %}stock-out{% else %}stock-low{% endif %}">
+            {{ alert.product.stock }}
+            {% if alert.product.stock != alert.stock_at_alert %}
+            <span style="color:#8b939c;font-size:11px;">(was {{ alert.stock_at_alert }})</span>
+            {% endif %}
+          </td>
+          <td>{{ alert.threshold_at_alert }}</td>
+          <td>
+            {{ alert.created_at|date:"M d, Y H:i" }}
+            {% if alert.resolved_at %}<br><span style="color:#8b939c;font-size:11px;">Resolved {{ alert.resolved_at|date:"M d, H:i" }}</span>{% endif %}
+          </td>
+          <td style="white-space:nowrap;">
+            <a href="{% url 'dashboard:product_edit' alert.product_id %}" class="dash-btn dash-btn-ghost dash-btn-sm">Edit product</a>
+            {% if not alert.is_resolved %}
+            <form action="{% url 'dashboard:stock_alert_resolve' alert.pk %}" method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="dash-btn dash-btn-sm dash-btn-ghost">Dismiss</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    {% if show == 'open' %}No open stock alerts. Inventory looks healthy.{% else %}No resolved alerts yet.{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

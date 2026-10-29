@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %}Alesi Grocery Store{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" media="all" />
+<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all" />
+<link href="{% static 'css/font-awesome.css' %}" rel="stylesheet" type="text/css" media="all" />
+<link href="{% static 'css/alesi-sidebar.css' %}" rel="stylesheet" type="text/css" media="all" />
+<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+<link href='//fonts.googleapis.com/css?family=Ubuntu:400,300,300italic,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="{% static 'js/move-top.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/easing.js' %}"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$(".scroll").click(function(event){
+			event.preventDefault();
+			$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+		});
+	});
+</script>
+<style>
+.django-messages { margin: 10px 0; }
+.django-messages .alert { padding: 10px 15px; margin-bottom: 8px; border-radius: 2px; }
+.alert-success { background: #dff0d8; color: #3c763d; }
+.alert-error, .alert-danger { background: #f2dede; color: #a94442; }
+.alert-warning { background: #fcf8e3; color: #8a6d3b; }
+.alert-info { background: #d9edf7; color: #31708f; }
+.cart-badge {
+  display: inline-block; background: #FA1818; color: #fff;
+  border-radius: 10px; padding: 0 6px; font-size: 11px; margin-left: 4px;
+}
+.out-of-stock { opacity: 0.6; }
+.out-of-stock .button { pointer-events: none; background: #999 !important; }
+</style>
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+{% include 'partials/_header.html' %}
+{% if messages %}
+<div class="container django-messages">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+{% block content %}{% endblock %}
+{% include 'partials/_newsletter.html' %}
+{% include 'partials/_footer.html' %}
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script>
+$(document).ready(function(){
+    $(".dropdown").hover(
+        function() {
+            $('.dropdown-menu', this).stop( true, true ).slideDown("fast");
+            $(this).toggleClass('open');
+        },
+        function() {
+            $('.dropdown-menu', this).stop( true, true ).slideUp("fast");
+            $(this).toggleClass('open');
+        }
+    );
+});
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$().UItoTop({ easingType: 'easeOutQuart' });
+	});
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

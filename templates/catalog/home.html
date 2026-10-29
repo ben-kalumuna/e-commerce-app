@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Alesi Grocery Store — Home{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/flexslider.css' %}" type="text/css" media="screen" />
+{% endblock %}
+
+{% block content %}
+<div class="banner">
+	{% include 'partials/_sidebar.html' %}
+	<div class="w3l_banner_nav_right">
+		<section class="slider">
+			<div class="flexslider">
+				<ul class="slides">
+					<li>
+						<div class="w3l_banner_nav_right_banner">
+							<h3>Make your <span>food</span> with Spicy.</h3>
+							<div class="more">
+								<a href="{% url 'catalog:deals' %}" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="w3l_banner_nav_right_banner1">
+							<h3>Fresh <span>groceries</span> delivered.</h3>
+							<div class="more">
+								<a href="{% url 'catalog:deals' %}" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="w3l_banner_nav_right_banner2">
+							<h3>upto <i>50%</i> off.</h3>
+							<div class="more">
+								<a href="{% url 'catalog:deals' %}" class="button--saqui button--round-l button--text-thick" data-text="Shop now">Shop now</a>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</section>
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class="top-brands">
+	<div class="container">
+		<h3>Hot Offers</h3>
+		<div class="agile_top_brands_grids">
+			{% for product in hot_offers %}
+				{% include 'partials/_product_card.html' with product=product grid_class='top_brand_left' %}
+			{% empty %}
+				<p>No offers yet. Add products in the admin.</p>
+			{% endfor %}
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+</div>
+
+<div class="top-brands">
+	<div class="container">
+		<h3>Featured Products</h3>
+		<div class="agile_top_brands_grids">
+			{% for product in featured_products %}
+				{% include 'partials/_product_card.html' with product=product grid_class='top_brand_left' %}
+			{% empty %}
+				<p>No featured products yet.</p>
+			{% endfor %}
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+</div>
+
+<div class="top-brands">
+	<div class="container">
+		<h3>Top Products</h3>
+		<div class="agile_top_brands_grids">
+			{% for product in top_products %}
+				{% include 'partials/_product_card.html' with product=product grid_class='top_brand_left' %}
+			{% endfor %}
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script defer src="{% static 'js/jquery.flexslider.js' %}"></script>
+<script type="text/javascript">
+$(window).load(function(){
+  $('.flexslider').flexslider({ animation: "slide", start: function(slider){ $('body').removeClass('loading'); } });
+});
+</script>
+{% endblock %}

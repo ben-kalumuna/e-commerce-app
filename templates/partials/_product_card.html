@@ -1,0 +1,42 @@
+{% load static %}
+{% with product=product %}
+<div class="col-md-3 {% if grid_class %}{{ grid_class }}{% else %}w3ls_w3l_banner_left{% endif %}">
+	<div class="hover14 column">
+	<div class="agile_top_brand_left_grid w3l_agile_top_brand_left_grid {% if not product.in_stock %}out-of-stock{% endif %}">
+		{% if product.on_sale %}
+		<div class="agile_top_brand_left_grid_pos">
+			<img src="{% static 'images/offer.png' %}" alt="" class="img-responsive" />
+		</div>
+		{% endif %}
+		<div class="agile_top_brand_left_grid1">
+			<figure>
+				<div class="snipcart-item block">
+					<div class="snipcart-thumb">
+						<a href="{{ product.get_absolute_url }}">
+							{% if product.image %}
+							<img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive" style="max-height:140px;object-fit:contain;margin:0 auto;" />
+							{% else %}
+							<img src="{% static 'images/1.png' %}" alt="{{ product.name }}" class="img-responsive" />
+							{% endif %}
+						</a>
+						<p>{{ product.name }}</p>
+						<h4>${{ product.price }}{% if product.on_sale %} <span>${{ product.compare_at_price }}</span>{% endif %}</h4>
+					</div>
+					<div class="snipcart-details">
+						{% if product.in_stock %}
+						<form action="{% url 'cart:add' product.id %}" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="next" value="{{ request.path }}">
+							<input type="submit" value="Add to cart" class="button" />
+						</form>
+						{% else %}
+						<button type="button" class="button" disabled>Out of stock</button>
+						{% endif %}
+					</div>
+				</div>
+			</figure>
+		</div>
+	</div>
+	</div>
+</div>
+{% endwith %}

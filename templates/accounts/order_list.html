@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Orders — Alesi Grocery{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li>My Orders</li>
+		</ul>
+	</div>
+</div>
+<div class="checkout">
+	<div class="container">
+		<h2>My Orders</h2>
+		{% if orders %}
+		<table class="timetable_sub">
+			<thead>
+				<tr>
+					<th>Order #</th>
+					<th>Date</th>
+					<th>Status</th>
+					<th>Total</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for order in orders %}
+				<tr>
+					<td>{{ order.pk }}</td>
+					<td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+					<td>
+						{{ order.get_status_display }}
+						{% if order.customer_confirmed_at %}<br><small style="color:#84C639;">Received by you</small>{% endif %}
+						{% if order.can_confirm_delivery %}<br><small style="color:#FA1818;">Confirm receipt when delivered</small>{% endif %}
+					</td>
+					<td>${{ order.total }}</td>
+					<td><a href="{% url 'accounts:order_detail' order.pk %}">View</a></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% else %}
+		<p style="padding:30px 0;">You have no orders yet. <a href="{% url 'catalog:home' %}">Start shopping</a>.</p>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

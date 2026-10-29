@@ -1,0 +1,22 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<section class="dash-kpi-row">
+  <div class="dash-card dash-kpi"><div><p class="label">Products</p><p class="value">{{ stats.products }}</p></div></div>
+  <div class="dash-card dash-kpi"><div><p class="label">Categories</p><p class="value">{{ stats.categories }}</p></div></div>
+  <div class="dash-card dash-kpi"><div><p class="label">Orders</p><p class="value">{{ stats.orders }}</p></div></div>
+  <div class="dash-card dash-kpi"><div><p class="label">Customers</p><p class="value">{{ stats.customers }}</p></div></div>
+</section>
+
+<div class="dash-card">
+  <div class="dash-card-head"><h2>Admin account</h2></div>
+  <p><strong>Username:</strong> {{ admin_user.username }}</p>
+  <p><strong>Email:</strong> {{ admin_user.email|default:"—" }}</p>
+  <p><strong>Role:</strong> {% if admin_user.is_superuser %}Superuser{% else %}Staff{% endif %}</p>
+  <p style="color:#8b939c;margin-top:20px;">Storefront branding uses Alesi Grocery. Payment method for v1 is Cash on Delivery. Newsletter subscribers: {{ stats.subscribers }} active.</p>
+  <div class="dash-actions" style="margin-top:20px;">
+    <a href="{% url 'catalog:home' %}" class="dash-btn">Open storefront</a>
+    <a href="/admin/" class="dash-btn dash-btn-ghost">Django Admin (advanced)</a>
+  </div>
+</div>
+{% endblock %}

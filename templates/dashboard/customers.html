@@ -1,0 +1,38 @@
+{% extends 'dashboard/base.html' %}
+
+{% block search_action %}{% url 'dashboard:customer_list' %}{% endblock %}
+
+{% block content %}
+<div class="dash-card">
+  {% if customers %}
+  <div class="dash-table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Orders</th>
+          <th>Joined</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in customers %}
+        <tr>
+          <td><strong>{{ c.username }}</strong></td>
+          <td>{{ c.email|default:"—" }}</td>
+          <td>{{ c.profile.phone|default:"—" }}</td>
+          <td>{{ c.order_count }}</td>
+          <td>{{ c.date_joined|date:"M d, Y" }}</td>
+          <td><a href="{% url 'dashboard:customer_detail' c.pk %}" class="dash-btn dash-btn-ghost dash-btn-sm">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No customers yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

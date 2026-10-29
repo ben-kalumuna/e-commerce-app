@@ -1,0 +1,82 @@
+{% load static %}
+<div class="agileits_header">
+	<div class="w3l_offers">
+		<a href="{% url 'catalog:deals' %}">Today's special Offers !</a>
+	</div>
+	<div class="w3l_search">
+		<form action="{% url 'catalog:search' %}" method="get">
+			<input type="text" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Search a product..." required>
+			<input type="submit" value=" ">
+		</form>
+	</div>
+	<div class="product_list_header">
+		<a href="{% url 'cart:detail' %}" class="button" style="display:inline-block;padding:8px 16px;text-decoration:none;color:#fff;background:#84C639;border:none;margin-top:8px;">
+			View your cart{% if cart_item_count %}<span class="cart-badge">{{ cart_item_count }}</span>{% endif %}
+		</a>
+	</div>
+	<div class="w3l_header_right">
+		<ul>
+			<li class="dropdown profile_details_drop">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i><span class="caret"></span></a>
+				<div class="mega-dropdown-menu">
+					<div class="w3ls_vegetables">
+						<ul class="dropdown-menu drp-mnu">
+							{% if user.is_authenticated %}
+							<li><a href="{% url 'accounts:order_list' %}">My Orders</a></li>
+							{% if user.is_staff %}<li><a href="{% url 'dashboard:overview' %}">Admin Dashboard</a></li>{% endif %}
+							<li>
+								<form action="{% url 'accounts:logout' %}" method="post" style="margin:0;">
+									{% csrf_token %}
+									<button type="submit" style="background:none;border:none;padding:3px 20px;width:100%;text-align:left;color:inherit;">Logout ({{ user.username }})</button>
+								</form>
+							</li>
+							{% else %}
+							<li><a href="{% url 'accounts:login' %}">Login</a></li>
+							<li><a href="{% url 'accounts:register' %}">Sign Up</a></li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="w3l_header_right1">
+		<h2><a href="{% url 'pages:contact' %}">Contact Us</a></h2>
+	</div>
+	<div class="clearfix"> </div>
+</div>
+<script>
+$(document).ready(function() {
+	 var navoffeset=$(".agileits_header").offset().top;
+	 $(window).scroll(function(){
+		var scrollpos=$(window).scrollTop();
+		if(scrollpos >=navoffeset){
+			$(".agileits_header").addClass("fixed");
+		}else{
+			$(".agileits_header").removeClass("fixed");
+		}
+	 });
+});
+</script>
+<div class="logo_products">
+	<div class="container">
+		<div class="w3ls_logo_products_left">
+			<h1><a href="{% url 'catalog:home' %}"><span>Alesi</span> Grocery</a></h1>
+		</div>
+		<div class="w3ls_logo_products_left1">
+			<ul class="special_items">
+				<li><a href="{% url 'pages:events' %}">Events</a><i>/</i></li>
+				<li><a href="{% url 'pages:about' %}">About Us</a><i>/</i></li>
+				<li><a href="{% url 'catalog:deals' %}">Best Deals</a><i>/</i></li>
+				<li><a href="{% url 'pages:services' %}">Services</a></li>
+			</ul>
+		</div>
+		<div class="w3ls_logo_products_left1">
+			<ul class="phone_email">
+				<li><i class="fa fa-phone" aria-hidden="true"></i><a href="tel:+256741995192">+256741995192</a></li>
+				<li><i class="fa fa-envelope-o" aria-hidden="true"></i><a href="mailto:princebayo@gmail.com">princebayo@gmail.com</a></li>
+			</ul>
+		</div>
+		<div class="clearfix"> </div>
+	</div>
+</div>

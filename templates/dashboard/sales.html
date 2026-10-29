@@ -1,0 +1,59 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<section class="dash-kpi-row" style="grid-template-columns: repeat(2, 1fr);">
+  <div class="dash-card dash-kpi">
+    <div>
+      <p class="label">Delivered sales</p>
+      <p class="value">${{ total_sales|floatformat:2 }}</p>
+    </div>
+    <div class="dash-kpi-icon mint">$</div>
+  </div>
+  <div class="dash-card dash-kpi">
+    <div>
+      <p class="label">Pipeline (confirmed+)</p>
+      <p class="value">${{ pipeline|floatformat:2 }}</p>
+    </div>
+    <div class="dash-kpi-icon blue">↗</div>
+  </div>
+</section>
+
+<div class="dash-grid-2">
+  <div class="dash-card">
+    <div class="dash-card-head"><h2>By status</h2></div>
+    <div class="dash-table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>Status</th><th>Orders</th><th>Revenue</th></tr></thead>
+        <tbody>
+          {% for row in by_status %}
+          <tr>
+            <td><span class="status-pill status-{{ row.status }}">{{ row.status }}</span></td>
+            <td>{{ row.count }}</td>
+            <td>${{ row.revenue|default:0 }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3">No data yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="dash-card">
+    <div class="dash-card-head"><h2>Recent</h2></div>
+    <div class="dash-table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>#</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for order in recent %}
+          <tr>
+            <td><a href="{% url 'dashboard:order_detail' order.pk %}">#{{ order.pk }}</a></td>
+            <td>${{ order.total }}</td>
+            <td><span class="status-pill status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

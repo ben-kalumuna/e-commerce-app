@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us — Alesi Grocery{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li>About Us</li>
+		</ul>
+	</div>
+</div>
+<div class="banner">
+	{% include 'partials/_sidebar.html' %}
+	<div class="w3l_banner_nav_right">
+		<div class="w3l_banner_nav_right_banner3">
+			<h3>About Us<span class="blink_me"></span></h3>
+		</div>
+		<div class="about" style="padding:30px;">
+			<h3 class="w3_agileits_head">About <span>Alesi</span></h3>
+			<p class="animi">At Alesi Grocery Store, we believe that good food brings people together. We are committed to providing our community with fresh produce, kitchen staples, and daily necessities—sourced with care and delivered with a smile.</p>
+			<div class="w3ls_banner_bottom_grids" style="margin-top:30px;">
+				<div class="col-md-6 w3ls_banner_bottom_grid">
+					<img src="{% static 'images/prince 1.jpg' %}" alt="Alesi team" class="img-responsive" onerror="this.style.display='none'">
+				</div>
+				<div class="col-md-6 w3ls_banner_bottom_grid">
+					<h4>Why shop with us?</h4>
+					<ul>
+						<li>Fresh produce and quality brands</li>
+						<li>Easy online ordering</li>
+						<li>Cash on delivery</li>
+						<li>Friendly local service</li>
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+{% endblock %}

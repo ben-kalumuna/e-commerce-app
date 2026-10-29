@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Your Cart — Alesi Grocery{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li>Checkout Details</li>
+		</ul>
+	</div>
+</div>
+<div class="checkout">
+	<div class="container">
+		<h2>Your shopping cart contains: <span>{{ items|length }} Products</span></h2>
+
+		{% if cart_locked and active_order %}
+		<div style="background:#e8f5e9;border:1px solid #84C639;padding:16px;margin-bottom:20px;border-radius:4px;">
+			<strong>Order #{{ active_order.pk }} in progress</strong>
+			({{ active_order.get_status_display }}) — these items stay in your cart until you confirm delivery.
+			<a href="{% url 'accounts:order_detail' active_order.pk %}" style="margin-left:8px;">Track / confirm receipt →</a>
+		</div>
+		{% endif %}
+
+		{% if items %}
+		<div class="checkout-right">
+			<table class="timetable_sub">
+				<thead>
+					<tr>
+						<th>SL No.</th>
+						<th>Product</th>
+						<th>Quantity</th>
+						<th>Product Name</th>
+						<th>Price</th>
+						<th>Remove</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in items %}
+					<tr>
+						<td class="invert">{{ forloop.counter }}</td>
+						<td class="invert-image">
+							<a href="{{ item.product.get_absolute_url }}">
+								{% if item.product.image %}
+								<img src="{{ item.product.image.url }}" alt="" class="img-responsive" style="max-width:80px;">
+								{% else %}
+								<img src="{% static 'images/1.png' %}" alt="" class="img-responsive" style="max-width:80px;">
+								{% endif %}
+							</a>
+						</td>
+						<td class="invert">
+							{% if cart_locked %}
+							{{ item.quantity }}
+							{% else %}
+							<form action="{% url 'cart:update' item.product_id %}" method="post" style="display:inline-flex;align-items:center;gap:6px;">
+								{% csrf_token %}
+								<input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" style="width:60px;">
+								<button type="submit" class="button" style="padding:4px 8px;">Update</button>
+							</form>
+							{% endif %}
+						</td>
+						<td class="invert">{{ item.product.name }}</td>
+						<td class="invert">${{ item.line_total }}</td>
+						<td class="invert">
+							{% if cart_locked %}
+							—
+							{% else %}
+							<form action="{% url 'cart:remove' item.product_id %}" method="post">
+								{% csrf_token %}
+								<button type="submit" style="border:none;background:transparent;cursor:pointer;" title="Remove">&times;</button>
+							</form>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="checkout-left">
+			<div class="col-md-4 checkout-left-basket">
+				<h4>Basket summary</h4>
+				<ul>
+					{% for item in items %}
+					<li>{{ item.product.name }} <i>-</i> <span>${{ item.line_total }}</span></li>
+					{% endfor %}
+					<li>Total <i>-</i> <span>${{ subtotal }}</span></li>
+				</ul>
+			</div>
+			<div class="col-md-8 address_form_agile">
+				{% if cart_locked and active_order %}
+				<a href="{% url 'accounts:order_detail' active_order.pk %}" class="button" style="display:inline-block;margin-top:20px;padding:12px 24px;background:#84C639;color:#fff;text-decoration:none;">Go to order #{{ active_order.pk }}</a>
+				<p style="margin-top:12px;color:#666;">Checkout is paused until you confirm delivery of this order.</p>
+				{% elif user.is_authenticated %}
+				<a href="{% url 'orders:checkout' %}" class="button" style="display:inline-block;margin-top:20px;padding:12px 24px;background:#84C639;color:#fff;text-decoration:none;">Proceed to Checkout (COD)</a>
+				{% else %}
+				<p style="margin-top:20px;">Please <a href="{% url 'accounts:login' %}?next={% url 'orders:checkout' %}">log in</a> to place your order.</p>
+				{% endif %}
+				<p style="margin-top:12px;"><a href="{% url 'catalog:home' %}">Continue shopping</a></p>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+		{% else %}
+		<p style="padding:40px 0;">Your cart is empty. <a href="{% url 'catalog:home' %}">Browse products</a>.</p>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

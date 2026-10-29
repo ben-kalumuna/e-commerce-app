@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Privacy Policy — Alesi Grocery{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li>Privacy Policy</li>
+		</ul>
+	</div>
+</div>
+<div class="banner">
+	{% include 'partials/_sidebar.html' %}
+	<div class="w3l_banner_nav_right">
+		<div class="w3l_banner_nav_right_banner3">
+			<h3>Privacy &amp; Terms<span class="blink_me"></span></h3>
+		</div>
+		<div style="padding:30px;">
+			<h4>Privacy Policy</h4>
+			<p>We collect account details (username, email, phone) and delivery addresses solely to process your orders. We do not sell your personal information.</p>
+			<h4 style="margin-top:20px;">Terms of Use</h4>
+			<p>Orders are subject to product availability. Prices are shown in USD. Cash on Delivery is the accepted payment method for this storefront version.</p>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+{% endblock %}

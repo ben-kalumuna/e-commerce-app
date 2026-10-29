@@ -1,0 +1,31 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="dash-card">
+  <form method="post" class="dash-form">
+    {% csrf_token %}
+    <div class="dash-field">
+      <label>Name</label>
+      {{ form.name }}
+      {{ form.name.errors }}
+    </div>
+    <div class="dash-field">
+      <label>Parent category</label>
+      {{ form.parent }}
+    </div>
+    <div class="dash-field-row">
+      <div class="dash-field">
+        <label>Sort order</label>
+        {{ form.sort_order }}
+      </div>
+      <div class="dash-field">
+        <label>{{ form.is_active }} Active</label>
+      </div>
+    </div>
+    <div class="dash-actions">
+      <button type="submit" class="dash-btn">Save</button>
+      <a href="{% url 'dashboard:category_list' %}" class="dash-btn dash-btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

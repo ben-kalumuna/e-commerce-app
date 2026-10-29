@@ -1,0 +1,242 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<section class="dash-kpi-row">
+  <div class="dash-card dash-kpi">
+    <div>
+      <p class="label">Total Revenue</p>
+      <p class="value">${{ kpi.revenue|floatformat:0 }}</p>
+      <p class="sub">Last 30 days</p>
+    </div>
+    <div class="dash-kpi-icon mint">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+    </div>
+  </div>
+  <div class="dash-card dash-kpi">
+    <div>
+      <p class="label">Total Orders</p>
+      <p class="value">{{ kpi.orders }}</p>
+      <p class="sub">Last 30 days</p>
+    </div>
+    <div class="dash-kpi-icon blue">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M3 4h2l2.4 11h10l2-7H7"/></svg>
+    </div>
+  </div>
+  <div class="dash-card dash-kpi">
+    <div>
+      <p class="label">Total Customers</p>
+      <p class="value">{{ kpi.customers }}</p>
+      <p class="sub">Registered shoppers</p>
+    </div>
+    <div class="dash-kpi-icon mint">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+    </div>
+  </div>
+  <div class="dash-card dash-kpi">
+    <div>
+      <p class="label">Pending Orders</p>
+      <p class="value">{{ kpi.pending }}</p>
+      <p class="sub">Needs attention</p>
+    </div>
+    <div class="dash-kpi-icon orange">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v6"/><path d="M12 16h.01"/></svg>
+    </div>
+  </div>
+</section>
+
+<section class="dash-grid-2">
+  <div class="dash-card">
+    <div class="dash-card-head">
+      <h2>Sales Analytic</h2>
+      <span class="dash-select">Last 7 days</span>
+    </div>
+    <div class="metric-row">
+      <div class="metric-item">
+        <p class="m-label">Income</p>
+        <p class="m-value">${{ analytic.income|floatformat:2 }} <span class="badge badge-blue">+2.5%</span></p>
+      </div>
+      <div class="metric-item">
+        <p class="m-label">Expenses</p>
+        <p class="m-value">${{ analytic.expenses|floatformat:2 }} <span class="badge badge-orange">est.</span></p>
+      </div>
+      <div class="metric-item">
+        <p class="m-label">Balance</p>
+        <p class="m-value">${{ analytic.balance|floatformat:2 }} <span class="badge badge-mint">net</span></p>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="salesChart"></canvas>
+    </div>
+  </div>
+
+  <div class="dash-card">
+    <div class="dash-card-head">
+      <h2>Sales Target</h2>
+    </div>
+    <div class="target-row">
+      <span class="t-label">Daily Target</span>
+      <span class="t-value">{{ kpi.orders }} <span class="trend-up">↑</span></span>
+    </div>
+    <div class="target-row">
+      <span class="t-label">Pending</span>
+      <span class="t-value">{{ kpi.pending }} {% if kpi.pending %}<span class="trend-down">↓</span>{% else %}<span class="trend-up">✓</span>{% endif %}</span>
+    </div>
+    <div class="target-row">
+      <span class="t-label">Monthly Revenue</span>
+      <span class="t-value">${{ kpi.revenue|floatformat:0 }} <span class="trend-up">↑</span></span>
+    </div>
+    {% widthratio kpi.orders 50 100 as pct_raw %}
+    <div class="ring-wrap">
+      <div class="progress-ring" style="--pct: {{ pct_raw|default:10 }}">
+        <div class="progress-ring-inner">
+          <strong>{{ kpi.orders }}</strong>
+          <span>orders / 30d</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dash-grid-bottom">
+  <div class="dash-card">
+    <div class="dash-card-head">
+      <h2>Top Selling Products</h2>
+      <a href="{% url 'dashboard:product_list' %}" class="badge badge-mint">View all</a>
+    </div>
+    {% if top_products %}
+    <div class="product-scroll">
+      {% for item in top_products %}
+      <div class="product-tile">
+        {% if item.product and item.product.image %}
+        <img src="{{ item.product.image.url }}" alt="{{ item.name }}">
+        {% else %}
+        <div style="height:72px;display:grid;place-items:center;color:#bbb;font-size:24px;">🛒</div>
+        {% endif %}
+        <p class="pname">{{ item.name }}</p>
+        <p class="pmeta">{{ item.sold }} sold · {{ item.stock }} in stock</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">No sales data yet. Orders will appear here.</div>
+    {% endif %}
+  </div>
+
+  <div class="dash-card">
+    <div class="dash-card-head">
+      <h2>Stock health</h2>
+      <a href="{% url 'dashboard:stock_alerts' %}" class="badge badge-orange">{{ open_alert_count }} alert{{ open_alert_count|pluralize }}</a>
+    </div>
+    <div class="offer-list">
+      <div class="offer-item">
+        <div class="o-top"><span>Featured / On sale</span><span>{{ on_sale_count }}</span></div>
+        <div class="offer-bar"><span style="width:{% if on_sale_count %}70{% else %}10{% endif %}%;"></span></div>
+      </div>
+      <div class="offer-item">
+        <div class="o-top"><span>Low stock (at/below threshold)</span><span>{{ low_stock_count }}</span></div>
+        <div class="offer-bar orange"><span style="width:{% if low_stock_count %}55{% else %}8{% endif %}%;"></span></div>
+      </div>
+      <div class="offer-item">
+        <div class="o-top"><span>Out of stock</span><span>{{ out_of_stock }}</span></div>
+        <div class="offer-bar red"><span style="width:{% if out_of_stock %}40{% else %}5{% endif %}%;"></span></div>
+      </div>
+    </div>
+    {% if low_stock %}
+    <div class="dash-table-wrap" style="margin-top:16px;">
+      <table class="dash-table">
+        <thead><tr><th>Product</th><th>Stock</th><th>Alert at</th></tr></thead>
+        <tbody>
+          {% for p in low_stock %}
+          <tr>
+            <td><a href="{% url 'dashboard:product_edit' p.pk %}">{{ p.name }}</a></td>
+            <td class="{% if p.stock == 0 %}stock-out{% else %}stock-low{% endif %}">{{ p.stock }}</td>
+            <td>≤ {{ p.low_stock_threshold }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if recent_orders %}
+<section class="dash-card" style="margin-top:20px;">
+  <div class="dash-card-head">
+    <h2>Recent Orders</h2>
+    <a href="{% url 'dashboard:order_list' %}" class="badge badge-mint">All orders</a>
+  </div>
+  <div class="dash-table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in recent_orders %}
+        <tr>
+          <td><a href="{% url 'dashboard:order_detail' order.pk %}"><strong>#{{ order.pk }}</strong></a></td>
+          <td>{{ order.full_name }}</td>
+          <td>${{ order.total }}</td>
+          <td><span class="status-pill status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+          <td>{{ order.created_at|date:"M d, H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+  const labels = {{ chart_labels|safe }};
+  const values = {{ chart_values|safe }};
+  const ctx = document.getElementById('salesChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: values,
+        borderColor: '#3ecfad',
+        backgroundColor: (context) => {
+          const chart = context.chart;
+          const {ctx: c, chartArea} = chart;
+          if (!chartArea) return 'rgba(62,207,173,0.15)';
+          const g = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          g.addColorStop(0, 'rgba(62,207,173,0.35)');
+          g.addColorStop(1, 'rgba(62,207,173,0.02)');
+          return g;
+        },
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#3ecfad',
+        pointBorderWidth: 2,
+        borderWidth: 2.5,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#8b939c', font: { size: 11 } } },
+        y: { grid: { color: '#eef1f4' }, ticks: { color: '#8b939c', font: { size: 11 } }, beginAtZero: true }
+      }
+    }
+  });
+})();
+</script>
+{% endblock %}

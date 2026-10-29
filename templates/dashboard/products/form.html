@@ -1,0 +1,64 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="dash-card">
+  <form method="post" enctype="multipart/form-data" class="dash-form">
+    {% csrf_token %}
+    <div class="dash-field">
+      <label>Name</label>
+      {{ form.name }}
+      {{ form.name.errors }}
+    </div>
+    <div class="dash-field">
+      <label>Category</label>
+      {{ form.category }}
+      {{ form.category.errors }}
+    </div>
+    <div class="dash-field">
+      <label>Description</label>
+      {{ form.description }}
+    </div>
+    <div class="dash-field-row">
+      <div class="dash-field">
+        <label>Price ($)</label>
+        {{ form.price }}
+        {{ form.price.errors }}
+      </div>
+      <div class="dash-field">
+        <label>Compare at price ($)</label>
+        {{ form.compare_at_price }}
+      </div>
+    </div>
+    <div class="dash-field-row">
+      <div class="dash-field">
+        <label>Stock</label>
+        {{ form.stock }}
+      </div>
+      <div class="dash-field">
+        <label>Low-stock alert threshold</label>
+        {{ form.low_stock_threshold }}
+        <small style="color:#8b939c;">Alert when stock ≤ this number (default 10).</small>
+      </div>
+    </div>
+    <div class="dash-field">
+      <label>Image</label>
+      {{ form.image }}
+      {% if product and product.image %}
+      <p style="margin-top:8px;"><img src="{{ product.image.url }}" alt="" style="max-height:80px;border-radius:8px;"></p>
+      {% endif %}
+    </div>
+    <div class="dash-field-row">
+      <div class="dash-field">
+        <label>{{ form.is_featured }} Featured</label>
+      </div>
+      <div class="dash-field">
+        <label>{{ form.is_active }} Active (visible in store)</label>
+      </div>
+    </div>
+    <div class="dash-actions">
+      <button type="submit" class="dash-btn">{% if mode == 'edit' %}Save changes{% else %}Create product{% endif %}</button>
+      <a href="{% url 'dashboard:product_list' %}" class="dash-btn dash-btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

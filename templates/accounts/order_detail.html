@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order #{{ order.pk }} — Alesi Grocery{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li><a href="{% url 'accounts:order_list' %}">My Orders</a><span>|</span></li>
+			<li>Order #{{ order.pk }}</li>
+		</ul>
+	</div>
+</div>
+<div class="checkout">
+	<div class="container">
+		<h2>Order #{{ order.pk }}</h2>
+		<p><strong>Status:</strong> {{ order.get_status_display }}
+			{% if order.customer_confirmed_at %}
+			<span style="color:#84C639;"> · You confirmed receipt {{ order.customer_confirmed_at|date:"M d, Y H:i" }}</span>
+			{% endif %}
+		</p>
+		<p><strong>Payment:</strong> {{ order.get_payment_method_display }}</p>
+		<p><strong>Placed:</strong> {{ order.created_at|date:"M d, Y H:i" }}</p>
+		<p><strong>Deliver to:</strong> {{ order.full_name }}, {{ order.phone }},
+			{% if order.address_line %}{{ order.address_line }}, {% endif %}
+			{{ order.city }}{% if order.landmark %} ({{ order.landmark }}){% endif %}
+		</p>
+
+		{% if order.is_open %}
+		<div style="background:#fff8e6;border:1px solid #f0d78c;padding:14px 16px;margin:16px 0;border-radius:4px;">
+			<strong>Tracking:</strong> These items stay in your cart until you confirm you received the order
+			(and paid cash on delivery). After confirmation, the admin sees the order as <em>Delivered</em>.
+		</div>
+		{% endif %}
+
+		<div style="display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;">
+			{% for value, label in order.Status.choices %}
+			{% if value != 'cancelled' %}
+			<span style="padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;
+				{% if order.status == value %}background:#84C639;color:#fff;{% else %}background:#eee;color:#777;{% endif %}">
+				{{ label }}
+			</span>
+			{% endif %}
+			{% endfor %}
+		</div>
+
+		<table class="timetable_sub">
+			<thead>
+				<tr>
+					<th>Product</th>
+					<th>Qty</th>
+					<th>Price</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in order.items.all %}
+				<tr>
+					<td>{{ item.product_name }}</td>
+					<td>{{ item.quantity }}</td>
+					<td>${{ item.unit_price }}</td>
+					<td>${{ item.line_total }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<ul style="margin-top:20px;list-style:none;padding:0;">
+			<li>Subtotal: <strong>${{ order.subtotal }}</strong></li>
+			{% if order.service_charge %}<li>Service: <strong>${{ order.service_charge }}</strong></li>{% endif %}
+			<li>Total: <strong>${{ order.total }}</strong> (pay on delivery)</li>
+		</ul>
+
+		{% if order.can_confirm_delivery %}
+		<form action="{% url 'accounts:confirm_delivery' order.pk %}" method="post" style="margin-top:24px;"
+			onsubmit="return confirm('Confirm you received this order and paid cash on delivery?');">
+			{% csrf_token %}
+			<button type="submit" class="button" style="background:#84C639;color:#fff;border:none;padding:12px 24px;font-size:16px;">
+				I received my order (COD paid)
+			</button>
+		</form>
+		<p style="margin-top:8px;color:#666;font-size:13px;">Only confirm after the goods arrive and you have paid the delivery person.</p>
+		{% elif order.status == 'pending' %}
+		<p style="margin-top:20px;color:#666;">Waiting for the store to confirm your order. You can track status here and in your cart.</p>
+		{% elif order.status == 'delivered' %}
+		<p style="margin-top:20px;color:#84C639;font-weight:600;">Delivery complete. Thank you for shopping with Alesi!</p>
+		{% endif %}
+
+		{% if order.can_cancel %}
+		<form action="{% url 'accounts:cancel_order' order.pk %}" method="post" style="margin-top:16px;" onsubmit="return confirm('Cancel this order?');">
+			{% csrf_token %}
+			<button type="submit" class="button" style="background:#FA1818;color:#fff;border:none;padding:10px 20px;">Cancel Order</button>
+		</form>
+		{% endif %}
+		<p style="margin-top:20px;">
+			<a href="{% url 'cart:detail' %}">View cart</a> ·
+			<a href="{% url 'accounts:order_list' %}">Back to orders</a>
+		</p>
+	</div>
+</div>
+{% endblock %}

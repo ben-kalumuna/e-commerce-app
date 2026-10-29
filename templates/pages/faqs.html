@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}FAQs — Alesi Grocery{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li>FAQs</li>
+		</ul>
+	</div>
+</div>
+<div class="banner">
+	{% include 'partials/_sidebar.html' %}
+	<div class="w3l_banner_nav_right">
+		<div class="w3l_banner_nav_right_banner3">
+			<h3>FAQs<span class="blink_me"></span></h3>
+		</div>
+		<div style="padding:30px;">
+			<h4>How do I place an order?</h4>
+			<p>Add products to your cart, log in, and checkout with a delivery address. Payment is cash on delivery.</p>
+			<h4 style="margin-top:20px;">Can I cancel an order?</h4>
+			<p>Yes — while the order is still Pending, open My Orders and cancel it. Stock will be restored.</p>
+			<h4 style="margin-top:20px;">How do I contact support?</h4>
+			<p>Use the <a href="{% url 'pages:contact' %}">Contact Us</a> form, call <a href="tel:+256741995192">+256741995192</a>, or email <a href="mailto:princebayo@gmail.com">princebayo@gmail.com</a>.</p>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+{% endblock %}

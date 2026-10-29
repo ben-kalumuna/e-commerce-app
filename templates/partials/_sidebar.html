@@ -1,0 +1,80 @@
+<div class="w3l_banner_nav_left alesi-catnav">
+	<nav class="navbar nav_bottom">
+	  <div class="navbar-header nav_2">
+		  <button type="button" class="navbar-toggle collapsed navbar-toggle1" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+	   </div>
+		<div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
+			<div class="alesi-catnav-head">
+				<strong>Categories</strong>
+			</div>
+			<ul class="nav navbar-nav nav_1 alesi-catnav-list">
+				{% for cat in nav_categories %}
+					{% if cat.children.all %}
+					<li class="dropdown alesi-cat-item">
+						<a href="#" class="dropdown-toggle alesi-cat-link" data-toggle="dropdown">
+							<span class="alesi-cat-icon">
+								{% if 'veggie' in cat.slug or 'fruit' in cat.slug %}<i class="fa fa-leaf"></i>
+								{% elif 'beverage' in cat.slug or 'drink' in cat.slug %}<i class="fa fa-coffee"></i>
+								{% elif 'frozen' in cat.slug %}<i class="fa fa-snowflake-o"></i>
+								{% elif 'kitchen' in cat.slug %}<i class="fa fa-cutlery"></i>
+								{% elif 'pet' in cat.slug %}<i class="fa fa-paw"></i>
+								{% elif 'bread' in cat.slug or 'bakery' in cat.slug %}<i class="fa fa-birthday-cake"></i>
+								{% elif 'household' in cat.slug %}<i class="fa fa-home"></i>
+								{% elif 'brand' in cat.slug or 'food' in cat.slug %}<i class="fa fa-shopping-bag"></i>
+								{% else %}<i class="fa fa-th-large"></i>{% endif %}
+							</span>
+							<span class="alesi-cat-label">{{ cat.name }}</span>
+							<span class="alesi-cat-chevron"><i class="fa fa-angle-down"></i></span>
+						</a>
+						<div class="dropdown-menu mega-dropdown-menu w3ls_vegetables_menu alesi-cat-dropdown">
+							<div class="w3ls_vegetables">
+								<ul>
+									<li><a href="{{ cat.get_absolute_url }}"><i class="fa fa-arrow-right"></i> All {{ cat.name }}</a></li>
+									{% for child in cat.children.all %}
+										{% if child.is_active %}
+										<li><a href="{{ child.get_absolute_url }}">{{ child.name }}</a></li>
+										{% endif %}
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</li>
+					{% else %}
+					<li class="alesi-cat-item">
+						<a href="{{ cat.get_absolute_url }}" class="alesi-cat-link">
+							<span class="alesi-cat-icon">
+								{% if 'veggie' in cat.slug or 'fruit' in cat.slug %}<i class="fa fa-leaf"></i>
+								{% elif 'beverage' in cat.slug or 'drink' in cat.slug %}<i class="fa fa-coffee"></i>
+								{% elif 'frozen' in cat.slug %}<i class="fa fa-snowflake-o"></i>
+								{% elif 'kitchen' in cat.slug %}<i class="fa fa-cutlery"></i>
+								{% elif 'pet' in cat.slug %}<i class="fa fa-paw"></i>
+								{% elif 'bread' in cat.slug or 'bakery' in cat.slug %}<i class="fa fa-birthday-cake"></i>
+								{% elif 'household' in cat.slug %}<i class="fa fa-home"></i>
+								{% elif 'brand' in cat.slug or 'food' in cat.slug %}<i class="fa fa-shopping-bag"></i>
+								{% else %}<i class="fa fa-th-large"></i>{% endif %}
+							</span>
+							<span class="alesi-cat-label">{{ cat.name }}</span>
+							<span class="alesi-cat-chevron alesi-cat-chevron-go"><i class="fa fa-angle-right"></i></span>
+						</a>
+					</li>
+					{% endif %}
+				{% empty %}
+					<li class="alesi-cat-item">
+						<a href="{% url 'catalog:deals' %}" class="alesi-cat-link">
+							<span class="alesi-cat-icon"><i class="fa fa-tags"></i></span>
+							<span class="alesi-cat-label">Best Deals</span>
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+			<a href="{% url 'catalog:deals' %}" class="alesi-catnav-deals">
+				<i class="fa fa-bolt"></i> Today's best deals
+			</a>
+		</div>
+	</nav>
+</div>

@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+db.sqlite3
+media/products/
+staticfiles/
+.env
+*.egg-info/
+.DS_Store
+_smoke_test.py
+_extract_products.py

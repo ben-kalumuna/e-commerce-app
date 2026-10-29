@@ -1,0 +1,55 @@
+{% extends 'dashboard/base.html' %}
+
+{% block search_action %}{% url 'dashboard:product_list' %}{% endblock %}
+
+{% block content %}
+<div class="dash-toolbar">
+  <a href="{% url 'dashboard:product_create' %}" class="dash-btn">+ Add Product</a>
+  <a href="{% url 'dashboard:category_list' %}" class="dash-btn dash-btn-ghost">Categories</a>
+</div>
+
+<div class="dash-card">
+  {% if products %}
+  <div class="dash-table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td>{% if p.image %}<img class="thumb" src="{{ p.image.url }}" alt="">{% endif %}</td>
+          <td>
+            <strong>{{ p.name }}</strong>
+            {% if p.is_featured %}<span class="badge badge-mint">Featured</span>{% endif %}
+            {% if p.on_sale %}<span class="badge badge-orange">Sale</span>{% endif %}
+          </td>
+          <td>{{ p.category.name }}</td>
+          <td>${{ p.price }}{% if p.compare_at_price %} <span style="color:#8b939c;text-decoration:line-through;font-size:12px;">${{ p.compare_at_price }}</span>{% endif %}</td>
+          <td class="{% if p.stock == 0 %}stock-out{% elif p.stock <= 10 %}stock-low{% endif %}">{{ p.stock }}</td>
+          <td>{% if p.is_active %}<span class="badge badge-mint">Active</span>{% else %}<span class="badge badge-gray">Hidden</span>{% endif %}</td>
+          <td style="white-space:nowrap;">
+            <a href="{% url 'dashboard:product_edit' p.pk %}" class="dash-btn dash-btn-ghost dash-btn-sm">Edit</a>
+            <form action="{% url 'dashboard:product_delete' p.pk %}" method="post" style="display:inline;" onsubmit="return confirm('Delete this product?');">
+              {% csrf_token %}
+              <button type="submit" class="dash-btn dash-btn-danger dash-btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No products found. <a href="{% url 'dashboard:product_create' %}">Add one</a>.</div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'dashboard/base.html' %}
+
+{% block search_action %}{% url 'dashboard:order_list' %}{% endblock %}
+
+{% block content %}
+<div class="dash-toolbar">
+  <a href="{% url 'dashboard:order_list' %}" class="dash-btn {% if not status %}{% else %}dash-btn-ghost{% endif %} dash-btn-sm">All</a>
+  {% for value, label in status_choices %}
+  <a href="?status={{ value }}" class="dash-btn dash-btn-sm {% if status == value %}{% else %}dash-btn-ghost{% endif %}">{{ label }}</a>
+  {% endfor %}
+</div>
+<div class="dash-card">
+  {% if orders %}
+  <div class="dash-table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Customer</th>
+          <th>Phone</th>
+          <th>Total</th>
+          <th>Payment</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td><strong>#{{ order.pk }}</strong></td>
+          <td>{{ order.full_name }}<br><span style="color:#8b939c;font-size:12px;">@{{ order.user.username }}</span></td>
+          <td>{{ order.phone }}</td>
+          <td>${{ order.total }}</td>
+          <td>{{ order.get_payment_method_display }}</td>
+          <td><span class="status-pill status-{{ order.status }}">{{ order.get_status_display }}</span></td>
+          <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+          <td><a href="{% url 'dashboard:order_detail' order.pk %}" class="dash-btn dash-btn-ghost dash-btn-sm">Manage</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No orders found.</div>
+  {% endif %}
+</div>
+{% endblock %}

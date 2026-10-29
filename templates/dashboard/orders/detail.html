@@ -1,0 +1,67 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="dash-grid-2">
+  <div class="dash-card">
+    <div class="dash-card-head"><h2>Order #{{ order.pk }}</h2>
+      <span class="status-pill status-{{ order.status }}">{{ order.get_status_display }}</span>
+    </div>
+    <p><strong>Customer:</strong> {{ order.full_name }} (@{{ order.user.username }})</p>
+    <p><strong>Phone:</strong> {{ order.phone }}</p>
+    <p><strong>Address:</strong>
+      {% if order.address_line %}{{ order.address_line }}, {% endif %}
+      {{ order.city }}{% if order.landmark %} ({{ order.landmark }}){% endif %}
+      {% if order.address_type %} — {{ order.address_type }}{% endif %}
+    </p>
+    <p><strong>Payment:</strong> {{ order.get_payment_method_display }}</p>
+    <p><strong>Placed:</strong> {{ order.created_at|date:"M d, Y H:i" }}</p>
+    {% if order.customer_confirmed_at %}
+    <p style="color:#2bb894;"><strong>Customer confirmed receipt:</strong> {{ order.customer_confirmed_at|date:"M d, Y H:i" }}</p>
+    {% elif order.is_open %}
+    <p style="color:#ff9f43;"><strong>Awaiting customer receipt confirmation</strong> (items still held in their cart).</p>
+    {% endif %}
+
+    <div class="dash-table-wrap" style="margin-top:16px;">
+      <table class="dash-table">
+        <thead>
+          <tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+          {% for item in order.items.all %}
+          <tr>
+            <td>{{ item.product_name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.unit_price }}</td>
+            <td>${{ item.line_total }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:16px;"><strong>Subtotal:</strong> ${{ order.subtotal }} · <strong>Total:</strong> ${{ order.total }}</p>
+  </div>
+
+  <div class="dash-card">
+    <div class="dash-card-head"><h2>Update status</h2></div>
+    <form method="post" class="dash-form">
+      {% csrf_token %}
+      <div class="dash-field">
+        <label>Status</label>
+        {{ form.status }}
+      </div>
+      <div class="dash-field">
+        <label>Internal notes</label>
+        {{ form.notes }}
+      </div>
+      <div class="dash-actions">
+        <button type="submit" class="dash-btn">Save</button>
+        <a href="{% url 'dashboard:order_list' %}" class="dash-btn dash-btn-ghost">Back</a>
+      </div>
+    </form>
+    <p style="color:#8b939c;font-size:12px;margin-top:16px;">
+      Workflow: Pending → Confirmed → Out for delivery → customer confirms receipt (or you mark Delivered).
+      Customer confirmation auto-sets Delivered and clears their cart.
+    </p>
+  </div>
+</div>
+{% endblock %}

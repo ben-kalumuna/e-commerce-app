@@ -1,0 +1,40 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="dash-toolbar">
+  <a href="{% url 'dashboard:messages' %}" class="dash-btn dash-btn-ghost">Contact messages</a>
+</div>
+<div class="dash-card">
+  {% if subscribers %}
+  <div class="dash-table-wrap">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Subscribed</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in subscribers %}
+        <tr>
+          <td>{{ s.email }}</td>
+          <td>{% if s.is_active %}<span class="badge badge-mint">Active</span>{% else %}<span class="badge badge-gray">Inactive</span>{% endif %}</td>
+          <td>{{ s.created_at|date:"M d, Y" }}</td>
+          <td>
+            <form action="{% url 'dashboard:newsletter_toggle' s.pk %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="dash-btn dash-btn-ghost dash-btn-sm">{% if s.is_active %}Deactivate{% else %}Activate{% endif %}</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">No newsletter subscribers yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

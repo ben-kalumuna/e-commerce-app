@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Events — Alesi Grocery{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li>Events</li>
+		</ul>
+	</div>
+</div>
+<div class="banner">
+	{% include 'partials/_sidebar.html' %}
+	<div class="w3l_banner_nav_right">
+		<div class="w3l_banner_nav_right_banner3">
+			<h3>Events<span class="blink_me"></span></h3>
+		</div>
+		<div style="padding:30px;">
+			<h4>Community &amp; store events</h4>
+			<p>Follow our special offers and seasonal promotions. Check Best Deals for current discounts, and subscribe to our newsletter for updates.</p>
+			<p style="margin-top:16px;"><a href="{% url 'catalog:deals' %}">View Best Deals</a></p>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+{% endblock %}

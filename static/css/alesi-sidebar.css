@@ -1,0 +1,241 @@
+/* Alesi category sidebar */
+.alesi-catnav.w3l_banner_nav_left {
+  background: transparent !important;
+  padding: 0 0 16px;
+}
+
+.alesi-catnav .navbar,
+.alesi-catnav .navbar-collapse {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+.alesi-catnav .navbar-nav {
+  border: none !important;
+  margin: 0 !important;
+  width: 100%;
+}
+
+.alesi-catnav-head {
+  background: #fff;
+  color: #1c2a1a;
+  border: 1px solid #e4edd9;
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
+  padding: 16px 16px 12px;
+  box-shadow: none;
+}
+
+.alesi-catnav-eyebrow {
+  display: none;
+}
+
+.alesi-catnav-head strong {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #2a3b27;
+}
+
+.alesi-catnav-head strong::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  border-radius: 4px;
+  background: #84C639;
+  flex-shrink: 0;
+}
+
+.alesi-catnav-list {
+  background: #fff;
+  border: 1px solid #e4edd9;
+  border-top: none;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgba(28, 42, 26, 0.06);
+  margin: 0 !important;
+}
+
+.alesi-catnav .alesi-cat-item {
+  float: none !important;
+  width: 100%;
+  border-bottom: 1px solid #eef3e8;
+}
+
+.alesi-catnav .alesi-cat-item:last-of-type {
+  border-bottom: none;
+}
+
+.alesi-catnav .alesi-cat-link,
+.alesi-catnav .navbar-nav > li > a.alesi-cat-link {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 14px 14px 14px !important;
+  color: #243222 !important;
+  border: none !important;
+  border-bottom: none !important;
+  background: #fff !important;
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.3;
+  text-decoration: none !important;
+  transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease;
+}
+
+.alesi-catnav .alesi-cat-link:hover,
+.alesi-catnav .alesi-cat-link:focus,
+.alesi-catnav .nav .open > a.alesi-cat-link,
+.alesi-catnav .nav .open > a.alesi-cat-link:hover,
+.alesi-catnav .nav .open > a.alesi-cat-link:focus {
+  background: #f4faee !important;
+  color: #2f5d1a !important;
+  padding-left: 18px !important;
+}
+
+.alesi-cat-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: #eef7e4;
+  color: #5ea320;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.alesi-catnav .alesi-cat-link:hover .alesi-cat-icon,
+.alesi-catnav .open > a .alesi-cat-icon {
+  background: #84C639;
+  color: #fff;
+  transform: scale(1.04);
+}
+
+.alesi-cat-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.alesi-cat-chevron {
+  color: #9aaf90;
+  font-size: 14px;
+  transition: transform 0.18s ease, color 0.15s;
+}
+
+.alesi-catnav .open > a .alesi-cat-chevron {
+  transform: rotate(180deg);
+  color: #5ea320;
+}
+
+.alesi-cat-chevron-go {
+  opacity: 0;
+  transform: translateX(-4px);
+}
+
+.alesi-catnav .alesi-cat-link:hover .alesi-cat-chevron-go {
+  opacity: 1;
+  transform: translateX(0);
+  color: #5ea320;
+}
+
+/* Dropdown */
+.alesi-catnav .alesi-cat-dropdown.dropdown-menu,
+.alesi-catnav .w3ls_vegetables_menu.alesi-cat-dropdown {
+  position: static !important;
+  float: none !important;
+  width: 100% !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 !important;
+  padding: 6px 10px 12px !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: #f7fbf3 !important;
+  border-radius: 0 !important;
+  display: none;
+}
+
+.alesi-catnav .open > .alesi-cat-dropdown.dropdown-menu {
+  display: block !important;
+}
+
+.alesi-catnav .alesi-cat-dropdown .w3ls_vegetables ul {
+  margin: 0;
+  padding: 0;
+}
+
+.alesi-catnav .alesi-cat-dropdown .w3ls_vegetables ul li {
+  margin: 0 !important;
+  list-style: none;
+}
+
+.alesi-catnav .alesi-cat-dropdown .w3ls_vegetables ul li a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  color: #3d4f39 !important;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none !important;
+  transition: background 0.15s, color 0.15s;
+}
+
+.alesi-catnav .alesi-cat-dropdown .w3ls_vegetables ul li a:hover {
+  background: #fff;
+  color: #2f5d1a !important;
+}
+
+.alesi-catnav-deals {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 0;
+  padding: 13px 14px;
+  background: #fff8e8;
+  border: 1px solid #e4edd9;
+  border-top: none;
+  border-radius: 0 0 18px 18px;
+  color: #9a5b00 !important;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none !important;
+  box-shadow: 0 14px 34px rgba(28, 42, 26, 0.05);
+  transition: background 0.15s, color 0.15s;
+}
+
+.alesi-catnav-deals:hover {
+  background: #fff1d6;
+  color: #7a4500 !important;
+}
+
+.alesi-catnav .navbar-toggle1 {
+  background: #84C639;
+  border-radius: 10px;
+  margin: 8px 8px 10px;
+  border: none;
+}
+
+.alesi-catnav .navbar-toggle1 .icon-bar {
+  background: #fff;
+}
+
+@media (max-width: 767px) {
+  .alesi-catnav-head {
+    border-radius: 16px 16px 0 0;
+  }
+  .alesi-catnav-deals {
+    border-radius: 0 0 16px 16px;
+  }
+}

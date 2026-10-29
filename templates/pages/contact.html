@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us — Alesi Grocery{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/alesi-forms.css' %}" rel="stylesheet" type="text/css" media="all" />
+{% endblock %}
+
+{% block content %}
+<div class="products-breadcrumb">
+	<div class="container">
+		<ul>
+			<li><i class="fa fa-home" aria-hidden="true"></i><a href="{% url 'catalog:home' %}">Home</a><span>|</span></li>
+			<li>Contact</li>
+		</ul>
+	</div>
+</div>
+
+<div class="banner">
+	{% include 'partials/_sidebar.html' %}
+	<div class="w3l_banner_nav_right">
+		<div class="alesi-shell alesi-contact-wrap" style="padding: 24px 20px 16px;">
+			<div class="alesi-contact-hero">
+				<h2>We’d love to hear from you</h2>
+				<p>Questions about an order, delivery, or our store? Send a message and the Alesi team will get back to you.</p>
+			</div>
+
+			<div class="alesi-contact-grid">
+				<div>
+					<div class="alesi-info-card">
+						<h3>Contact details</h3>
+						<div class="alesi-info-row">
+							<div class="alesi-info-icon"><i class="fa fa-envelope-o"></i></div>
+							<div>
+								<strong>Email</strong>
+								<a href="mailto:princebayo@gmail.com">princebayo@gmail.com</a>
+							</div>
+						</div>
+						<div class="alesi-info-row">
+							<div class="alesi-info-icon"><i class="fa fa-phone"></i></div>
+							<div>
+								<strong>Phone</strong>
+								<a href="tel:+256741995192">+256741995192</a>
+							</div>
+						</div>
+						<div class="alesi-info-row">
+							<div class="alesi-info-icon"><i class="fa fa-clock-o"></i></div>
+							<div>
+								<strong>Hours</strong>
+								<span>Mon–Sat, 8:00 AM – 8:00 PM</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="alesi-info-card" style="background: linear-gradient(145deg, #2f5d1a, #84C639); color: #fff; border: none;">
+						<h3 style="color:#fff;">Need order help?</h3>
+						<p style="margin:0 0 14px;color:rgba(255,255,255,.9);font-size:14px;line-height:1.55;">
+							Signed-in customers can track COD orders and confirm delivery from <strong>My Orders</strong>.
+						</p>
+						<a href="{% url 'accounts:login' %}" class="alesi-btn" style="width:auto;padding:11px 18px;box-shadow:none;background:#fff;color:#2f5d1a !important;">Go to login</a>
+					</div>
+				</div>
+
+				<div class="alesi-contact-form-card">
+					<h3>Send a message</h3>
+					<p class="alesi-form-sub">Fill in the form and we’ll reply as soon as we can.</p>
+
+					{% if form.errors %}
+					<div class="alesi-alert alesi-alert-error">Please check the fields below and try again.</div>
+					{% endif %}
+
+					<form action="{% url 'pages:contact' %}" method="post" novalidate>
+						{% csrf_token %}
+						<div class="alesi-field-row">
+							<div class="alesi-field no-icon">
+								<label for="{{ form.name.id_for_label }}">Full name</label>
+								{{ form.name }}
+								{% if form.name.errors %}<div class="alesi-error">{{ form.name.errors|striptags }}</div>{% endif %}
+							</div>
+							<div class="alesi-field no-icon">
+								<label for="{{ form.email.id_for_label }}">Email</label>
+								{{ form.email }}
+								{% if form.email.errors %}<div class="alesi-error">{{ form.email.errors|striptags }}</div>{% endif %}
+							</div>
+						</div>
+						<div class="alesi-field-row">
+							<div class="alesi-field no-icon">
+								<label for="{{ form.telephone.id_for_label }}">Telephone</label>
+								{{ form.telephone }}
+							</div>
+							<div class="alesi-field no-icon">
+								<label for="{{ form.subject.id_for_label }}">Subject</label>
+								{{ form.subject }}
+							</div>
+						</div>
+						<div class="alesi-field no-icon">
+							<label for="{{ form.message.id_for_label }}">Message</label>
+							{{ form.message }}
+							{% if form.message.errors %}<div class="alesi-error">{{ form.message.errors|striptags }}</div>{% endif %}
+						</div>
+						<button type="submit" class="alesi-btn">Send message</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+{% endblock %}
